@@ -15,17 +15,19 @@ int main(int argc, char *argv[])
     int event_base, error_base;
     XScreenSaverInfo info;
     float seconds;
+    int mins = 3;
 
     display = XOpenDisplay("");
 
     if (XScreenSaverQueryExtension(display, &event_base, &error_base))
     {
+        fprintf(stdout, "Keepalive started.  Will watch for movement every %d minutes", mins);
         while (1)
         {
             XScreenSaverQueryInfo(display, DefaultRootWindow(display), &info);
             seconds = (float)info.idle / 1000.0f;
 
-            if (seconds > (4 * 60)) {
+            if (seconds > (mins * 60)) {
                 // log
                 time_t rawtime;
                 struct tm *local;
@@ -33,9 +35,13 @@ int main(int argc, char *argv[])
                 time(&rawtime);
                 local = localtime(&rawtime);
 
+                // get pseudorandom pos x and y
+                int x = random() / (RAND_MAX/2000);
+                int y = random() / (RAND_MAX/1000);
+                sprintf(buffer, "xdotool mousemove %d %d", x, y);
                 // launch app to move mouse
-                fprintf(stdout, "Moving mouse %s", asctime(local));
-                int status = system("xdotool mousemove 750 200");
+                fprintf(stdout, "Moving mouse %s - %s\n", asctime(local), buffer);
+                int status = system(buffer);
                 if (status == 0) {
                     status++;
                 }

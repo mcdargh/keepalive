@@ -36,8 +36,8 @@ int main(int argc, char *argv[])
                 local = localtime(&rawtime);
 
                 // get pseudorandom pos x and y
-                int x = random() / (RAND_MAX/2000);
-                int y = random() / (RAND_MAX/1000);
+                int x = random() / (RAND_MAX/800);
+                int y = random() / (RAND_MAX/600);
                 sprintf(buffer, "xdotool mousemove %d %d", x, y);
                 // launch app to move mouse
                 fprintf(stdout, "Moving mouse %s - %s\n", asctime(local), buffer);

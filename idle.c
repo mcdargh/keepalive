@@ -21,7 +21,8 @@ int main(int argc, char *argv[])
 
     if (XScreenSaverQueryExtension(display, &event_base, &error_base))
     {
-        fprintf(stdout, "Keepalive started.  Will watch for movement every %d minutes", mins);
+        fprintf(stdout, "Keepalive started.  Will watch for movement every %d minutes\n", mins);
+        fflush(stdout);
         while (1)
         {
             XScreenSaverQueryInfo(display, DefaultRootWindow(display), &info);
@@ -41,6 +42,7 @@ int main(int argc, char *argv[])
                 sprintf(buffer, "xdotool mousemove %d %d", x, y);
                 // launch app to move mouse
                 fprintf(stdout, "Moving mouse %s - %s\n", asctime(local), buffer);
+                fflush(stdout);
                 int status = system(buffer);
                 if (status == 0) {
                     status++;
